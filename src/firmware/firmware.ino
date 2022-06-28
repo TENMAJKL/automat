@@ -18,7 +18,7 @@ test it lol
 #define MODE_WRITE 3
 
 #define PUSH(VARIABLE, PIN) VARIABLE = !VARIABLE && digitalRead(PIN) == HIGH ? true : VARIABLE; VARIABLE = VARIABLE && digitalRead(PIN) == LOW ? false : VARIABLE
-#define MODE(MODE, PIN) = mode = digitalRead(PIN) == HIGH ? MODE : mode
+#define MODE(MODE, PIN) mode = digitalRead(PIN) == HIGH ? MODE : mode
 
 // TODO pitches
 float pitches[8] = {0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1};
@@ -33,7 +33,7 @@ int note = 0;
 bool isPlaying = false;
 bool retreivedGate = false;
 
-const keys = {1, 2, 4, 5, 6, 7, 9, 10};
+const int keys[8]= {1, 2, 4, 5, 6, 7, 9, 10};
 
 void setup()
 {
@@ -53,8 +53,8 @@ void setup()
 
 void loop()
 {
-    PUSH(isPlaying);
-    PUSH(retreivedGate);
+    PUSH(isPlaying, 15);
+    PUSH(retreivedGate, 16);
 
     MODE(MODE_WRITE, 14);
     MODE(MODE_PITCH, 12);
@@ -72,14 +72,14 @@ void loop()
         case MODE_WRITE:
             for (int index = 0; index < 8; index++) {
                 if (digitalRead(keys[index]) == HIGH) {
-                    paterns[patern][index] = paterns[paterns][index] == 0 ? pitches[pitch] : 0;
+                    paterns[patern][index] = paterns[patern][index] == 0 ? pitches[pitch] : 0;
                 }
             }
             break;
         case MODE_PITCH:
             for (int index = 0; index < 8; index++) {
                 if (digitalRead(keys[index]) == HIGH) {
-                    pitch = pitches[$index]; 
+                    pitch = pitches[index]; 
                 }
             }
             break;           
