@@ -1,5 +1,4 @@
 /*
-
 PINS:
 1, 2, 4, 5, 6, 7, 9, 10 - keys
 11 - patern
@@ -10,7 +9,6 @@ PINS:
 
 TODO:
 test it lol
-
  */
 
 #define MODE_PITCH 1
@@ -55,12 +53,13 @@ void loop()
 {
     PUSH(isPlaying, 15);
     PUSH(retreivedGate, 16);
-
+    
     MODE(MODE_WRITE, 14);
     MODE(MODE_PITCH, 12);
     MODE(MODE_PATERN, 11);
 
-    if (retreivedGate && isPlaying) {
+    if (isPlaying && retreivedGate) {
+        counter = 0;
         digitalWrite(32, paterns[patern][note]);
         note++;
         if (note == 8) {
@@ -68,28 +67,24 @@ void loop()
         }
     }
 
-    switch (mode) {
-        case MODE_WRITE:
-            for (int index = 0; index < 8; index++) {
-                if (digitalRead(keys[index]) == HIGH) {
+    for (int index = 0; index < 8; index++) {
+        if (digitalRead(keys[index]) == HIGH) {
+            switch (mode) {
+                case MODE_WRITE:
                     paterns[patern][index] = paterns[patern][index] == 0 ? pitches[pitch] : 0;
-                }
-            }
-            break;
-        case MODE_PITCH:
-            for (int index = 0; index < 8; index++) {
-                if (digitalRead(keys[index]) == HIGH) {
-                    pitch = pitches[index]; 
-                }
-            }
-            break;           
 
-        case MODE_PATERN:
-            for (int index = 0; index < 8; index++) {
-                if (digitalRead(keys[index]) == HIGH) {
+                    break;
+                case MODE_PITCH:
+                    pitch = pitches[index]; 
+                    digitalWrite(32, pitches[index]);
+
+                    break;           
+                case MODE_PATERN:
                     patern = index;
-                }
+
+                    break; 
             }
-            break; 
+        }
     }
 }
+
