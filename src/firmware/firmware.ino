@@ -1,11 +1,11 @@
 /*
 PINS:
-1, 2, 4, 5, 6, 7, 9, 10 - keys
-11 - patern
-12 - pitch
-14 - write
-15 - play
-16 - clock in
+1, 2, 4, 5, 6, 7, 9, 10 (0-7) - keys
+11 (8) - patern
+12 (9) - pitch
+14 (10) - write
+15 (11) - play
+16 (12) - clock in
 
 TODO:
 test it lol
@@ -35,12 +35,11 @@ const int keys[8]= {1, 2, 4, 5, 6, 7, 9, 10};
 
 void setup()
 {
-    const int pins[13] = {1, 2, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16};
     for (int index = 0; index < 12; index++) {
-        pinMode(pins[index], INPUT);
+        pinMode(index, INPUT);
     }
 
-    pinMode(32, OUTPUT);
+    pinMode(26, OUTPUT);
 
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
@@ -51,15 +50,15 @@ void setup()
 
 void loop()
 {
-    PUSH(isPlaying, 15);
-    PUSH(retreivedGate, 16);
+    PUSH(isPlaying, 11);
+    PUSH(retreivedGate, 12);
     
-    MODE(MODE_WRITE, 14);
-    MODE(MODE_PITCH, 12);
-    MODE(MODE_PATERN, 11);
+    MODE(MODE_WRITE, 10);
+    MODE(MODE_PITCH, 9);
+    MODE(MODE_PATERN, 8);
 
     if (isPlaying && retreivedGate) {
-        digitalWrite(32, paterns[patern][note]);
+        analogWrite(32, paterns[patern][note]);
         note++;
         if (note == 8) {
             note = 0;
@@ -75,7 +74,7 @@ void loop()
                     break;
                 case MODE_PITCH:
                     pitch = pitches[index]; 
-                    digitalWrite(32, pitches[index]);
+                    analogWrite(26, pitches[index]);
 
                     break;           
                 case MODE_PATERN:
