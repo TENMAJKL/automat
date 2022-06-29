@@ -59,7 +59,6 @@ void loop()
     MODE(MODE_PATERN, 11);
 
     if (isPlaying && retreivedGate) {
-        counter = 0;
         digitalWrite(32, paterns[patern][note]);
         note++;
         if (note == 8) {
